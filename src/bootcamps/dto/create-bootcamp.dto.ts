@@ -1,8 +1,10 @@
-import { IsNotEmpty, IsAlpha, IsInt, Min, Max, IsPositive } from "class-validator";
+import { IsNotEmpty, IsAlpha, IsInt, Min, Max, IsPositive, ValidateNested, IsMongoId, IsArray, } from "class-validator";
+import { CreateCategoryDto } from "./category.dtos";
+import {Type} from 'class-transformer';
+import { Sponsor } from './../../sponsor/entities/sponsor.entity';
 export class CreateBootcampDto {
-    @IsNotEmpty()
-    @IsAlpha()
 
+    @IsNotEmpty()
     readonly name:string;
 
     @IsNotEmpty()
@@ -14,5 +16,19 @@ export class CreateBootcampDto {
     @Min(1)
     @Max(10)
     readonly averageRating:number;
+    
     readonly CreatedAt:Date;
+
+    @IsNotEmpty()
+    @ValidateNested()
+    @Type(()=>CreateCategoryDto)
+    readonly category:CreateCategoryDto;
+
+    @IsMongoId()
+    @IsNotEmpty()
+    sponsor:string;
+
+    @IsNotEmpty()
+    @IsArray()
+    readonly skills: any[]
 }
